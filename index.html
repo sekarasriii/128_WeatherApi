@@ -85,6 +85,30 @@
                 return;
             }
             const urlapi = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lokasi}&aqi=no`;
-            
+            $.ajax({
+                url: urlapi,
+                method: "GET",
+                success: function(data) {
+                    const lokasi = data.location.name;
+                    const negara = data.location.country;
+                    const provinsi = data.location.region;
+                    const kecamatan = data.location.tz_id;
+                    const suhu = data.current.temp_c;
+                    const longitude = data.location.lon;
+                    const latitude = data.location.lat;
+
+                    $("#tampilan").html(`
+                        <ul>
+                            <li><strong>Lokasi:</strong> ${lokasi}</li>
+                            <li><strong>Negara:</strong> ${negara}</li>
+                            <li><strong>Provinsi:</strong> ${provinsi}</li>
+                            <li><strong>Kecamatan (Timezone):</strong> ${kecamatan}</li>
+                            <li><strong>Suhu (°C):</strong> ${suhu}</li>
+                            <li><strong>Longitude:</strong> ${longitude}</li>
+                            <li><strong>Latitude:</strong> ${latitude}</li>
+                        </ul>
+                    `);
+                },
+                
 </body>
 </html>
