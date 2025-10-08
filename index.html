@@ -7,75 +7,178 @@
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
             min-height: 100vh;
             margin: 0;
             padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .bg-anim {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0;
+            pointer-events: none;
         }
         .container {
-            max-width: 400px;
-            margin: 40px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            padding: 32px 24px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 370px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 28px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 36px 28px 28px 28px;
+            margin: 24px;
+            backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255,255,255,0.18);
         }
         label {
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-weight: 700;
+            margin-bottom: 10px;
             display: block;
+            font-size: 1.15rem;
+            color: #357ae8;
+            letter-spacing: 0.5px;
         }
         input[type="text"] {
             width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #b0c4de;
-            margin-bottom: 16px;
-            font-size: 1rem;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1.5px solid #b0c4de;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            background: rgba(247,251,255,0.8);
+            transition: box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(79,140,255,0.06);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #357ae8;
         }
         button {
-            background: #4f8cff;
+            background: linear-gradient(90deg, #4f8cff 0%, #357ae8 100%);
             color: #fff;
             border: none;
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-size: 1rem;
+            padding: 14px 0;
+            border-radius: 14px;
+            font-size: 1.15rem;
             cursor: pointer;
-            transition: background 0.2s;
+            width: 100%;
+            font-weight: bold;
+            box-shadow: 0 2px 12px rgba(79,140,255,0.13);
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            transition: background 0.2s, transform 0.2s;
         }
         button:hover {
-            background: #357ae8;
+            background: linear-gradient(90deg, #357ae8 0%, #4f8cff 100%);
+            transform: scale(1.03);
         }
         #tampilan {
-            margin-top: 24px;
+            margin-top: 28px;
         }
-        ul {
-            list-style: none;
-            padding: 0;
+        .weather-card {
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            border-radius: 22px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.09);
+            padding: 30px 18px 22px 18px;
+            text-align: center;
+            animation: fadeIn 0.7s;
         }
-        li {
-            background: #f5f8fa;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .weather-icon {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .weather-icon img {
+            width: 64px;
+            height: 64px;
+            filter: drop-shadow(0 2px 8px #357ae8aa);
+        }
+        .temp {
+            font-size: 3.2rem;
+            font-weight: bold;
+            color: #357ae8;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 8px #66a6ff44;
+        }
+        .location {
+            font-size: 1.25rem;
+            font-weight: 700;
             margin-bottom: 8px;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-size: 1rem;
+            color: #222;
+            letter-spacing: 0.5px;
         }
-        hr {
-            margin: 24px 0;
-            border: none;
-            border-top: 1px solid #e0e0e0;
+        .condition {
+            color: #357ae8;
+            font-weight: 600;
+            margin-bottom: 14px;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+        .desc-list {
+            text-align: left;
+            margin-top: 14px;
+            padding-left: 0;
+        }
+        .desc-list li {
+            background: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #444;
+            box-shadow: 0 1px 4px #357ae80a;
+            display: flex;
+            align-items: center;
+        }
+        .desc-list li svg {
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+        @media (max-width: 500px) {
+            .container {
+                max-width: 98vw;
+                padding: 18px 8px;
+            }
+            .weather-card {
+                padding: 16px 6px;
+            }
+            .temp {
+                font-size: 2.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="bg-anim">
+        <svg width="100%" height="100%">
+            <circle cx="20%" cy="15%" r="60" fill="#4f8cff22">
+                <animate attributeName="cy" values="15%;85%;15%" dur="8s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="80%" cy="80%" r="40" fill="#357ae822">
+                <animate attributeName="cy" values="80%;20%;80%" dur="10s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="50%" cy="50%" r="100" fill="#89f7fe22">
+                <animate attributeName="r" values="100;120;100" dur="12s" repeatCount="indefinite"/>
+            </circle>
+        </svg>
+    </div>
     <div class="container">
-        <label for="lokasiInput">Nama Lokasi:</label>
-        <input type="text" id="lokasiInput" placeholder="Masukkan nama lokasi">
-        <button id="getCuaca">Get</button>
-        <hr>
+        <label for="lokasiInput">🌎 Nama Lokasi:</label>
+        <input type="text" id="lokasiInput" placeholder="Masukkan nama kota atau daerah...">
+        <button id="getCuaca">Lihat Cuaca</button>
         <div id="tampilan"></div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous"></script>
     <script>
         const apiKey = "876f0ecc75b84e3aa5263940250810";
         $("#getCuaca").click(function() {
@@ -85,6 +188,7 @@
                 return;
             }
             const urlapi = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lokasi}&aqi=no`;
+            $("#tampilan").html('<div style="text-align:center;padding:24px;"><span style="font-size:2rem;color:#357ae8;">⏳</span><br><span style="color:#357ae8;">Memuat data cuaca...</span></div>');
             $.ajax({
                 url: urlapi,
                 method: "GET",
@@ -96,21 +200,40 @@
                     const suhu = data.current.temp_c;
                     const longitude = data.location.lon;
                     const latitude = data.location.lat;
+                    const icon = data.current.condition.icon;
+                    const kondisi = data.current.condition.text;
 
                     $("#tampilan").html(`
-                        <ul>
-                            <li><strong>Lokasi:</strong> ${lokasi}</li>
-                            <li><strong>Negara:</strong> ${negara}</li>
-                            <li><strong>Provinsi:</strong> ${provinsi}</li>
-                            <li><strong>Kecamatan (Timezone):</strong> ${kecamatan}</li>
-                            <li><strong>Suhu (°C):</strong> ${suhu}</li>
-                            <li><strong>Longitude:</strong> ${longitude}</li>
-                            <li><strong>Latitude:</strong> ${latitude}</li>
-                        </ul>
+                        <div class="weather-card">
+                            <div class="weather-icon">
+                                <img src="https:${icon}" alt="icon">
+                            </div>
+                            <div class="temp">${suhu}°C</div>
+                            <div class="location">${lokasi}, ${negara}</div>
+                            <div class="condition">${kondisi}</div>
+                            <ul class="desc-list">
+                                <li>
+                                    <svg width="20" height="20" fill="#357ae8"><rect width="20" height="20" rx="5"/></svg>
+                                    <strong>Provinsi:</strong>&nbsp;${provinsi}
+                                </li>
+                                <li>
+                                    <svg width="20" height="20" fill="#4f8cff"><circle cx="10" cy="10" r="8"/></svg>
+                                    <strong>Kecamatan (Timezone):</strong>&nbsp;${kecamatan}
+                                </li>
+                                <li>
+                                    <svg width="20" height="20" fill="#357ae8"><path d="M10 2 L12 8 L18 8 L13 12 L15 18 L10 14 L5 18 L7 12 L2 8 L8 8 Z"/></svg>
+                                    <strong>Longitude:</strong>&nbsp;${longitude}
+                                </li>
+                                <li>
+                                    <svg width="20" height="20" fill="#66a6ff"><ellipse cx="10" cy="10" rx="8" ry="5"/></svg>
+                                    <strong>Latitude:</strong>&nbsp;${latitude}
+                                </li>
+                            </ul>
+                        </div>
                     `);
                 },
                 error: function(error) {
-                    $("#tampilan").html("Data tidak ditemukan atau terjadi kesalahan.");
+                    $("#tampilan").html('<div style="text-align:center;color:#e74c3c;font-weight:600;padding:24px;">Data tidak ditemukan atau terjadi kesalahan.<br>🌧️</div>');
                 }
             });
         });
